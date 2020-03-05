@@ -8,5 +8,5 @@ const migrations = {
 }
 
 module.exports = {
-  migrations
+  migrations,
 }

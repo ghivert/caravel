@@ -16,8 +16,8 @@ const helpText = [
   'Caravel deals exclusively with SQL files, written in pure SQL, in a migration',
   'folder. By using caravel generate, you can generate [timestamp]-filename.up.sql',
   'and [timestamp]-filename.down.sql. These files need to be filled with your queries',
-  'like \'CREATE TABLE users (fields);\' and \'DROP TABLE users;\', and then run',
-  'caravel migrate to get everyting up and running!'
+  "like 'CREATE TABLE users (fields);' and 'DROP TABLE users;', and then run",
+  'caravel migrate to get everyting up and running!',
 ].join('\n')
 
 program

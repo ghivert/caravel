@@ -1,7 +1,5 @@
 const createMigrationsTable = (client, tableName) => {
-  return client.query(
-    `CREATE TABLE ${tableName} (version text PRIMARY KEY)`
-  )
+  return client.query(`CREATE TABLE ${tableName} (version text PRIMARY KEY)`)
 }
 
 const checkIfMigrationTableExists = async (client, tableName) => {
@@ -10,8 +8,7 @@ const checkIfMigrationTableExists = async (client, tableName) => {
       SELECT 1
       FROM information_schema.tables
       WHERE table_name = '${tableName}'
-    )`
-  )
+    )`)
   const { exists } = response.rows[0]
   if (!exists) {
     console.log('🔧 No migration table found, creating...')
@@ -24,7 +21,9 @@ const checkIfMigrationTableExists = async (client, tableName) => {
 
 const getAllMigrationsFromTable = async (client, tableName) => {
   console.log('📈 Getting all migrations in table...')
-  const response = await client.query(`SELECT * FROM ${tableName} ORDER BY version`)
+  const response = await client.query(
+    `SELECT * FROM ${tableName} ORDER BY version`
+  )
   return response.rows
 }
 

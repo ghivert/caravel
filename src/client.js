@@ -7,9 +7,7 @@ const { Client } = require('pg')
 const createClientFromEnv = () => {
   const { DATABASE_URL } = process.env
   if (DATABASE_URL) {
-    return new Client({
-      connectionString: DATABASE_URL
-    })
+    return new Client({ connectionString: DATABASE_URL })
   } else {
     return null
   }
@@ -27,9 +25,9 @@ const createClientFromConfigFile = configFilePath => {
 
 const create = configFilePath => {
   return (
-    createClientFromConfigFile(configFilePath)
-    || createClientFromEnv()
-    || new Client()
+    createClientFromConfigFile(configFilePath) ||
+    createClientFromEnv() ||
+    new Client()
   )
 }
 
@@ -44,9 +42,11 @@ const connect = async client => {
   }
 }
 
-Client.prototype.databaseURL = Client.prototype.databaseURL || function() {
+function clientGenerateURL() {
   return helpers.generateDatabaseURL(this)
 }
+
+Client.prototype.databaseURL = Client.prototype.databaseURL || clientGenerateURL
 
 module.exports = {
   create,

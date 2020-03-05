@@ -3,10 +3,7 @@ const util = require('util')
 
 const generateUpAndDownFileNames = (timestamp, name) => {
   const baseName = `${timestamp}-${name}`
-  const upAndDownNames = [
-    `${baseName}.up`,
-    `${baseName}.down`,
-  ]
+  const upAndDownNames = [`${baseName}.up`, `${baseName}.down`]
   const fullNames = upAndDownNames.map(elem => `${elem}.sql`)
   return fullNames
 }

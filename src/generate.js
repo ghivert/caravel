@@ -20,7 +20,9 @@ const turnIntoAbsolutePath = migrationsPath => filename => {
 const handleAccessError = (migrationsPath, options) => error => {
   if (error.code === 'ENOENT') {
     if (options.verbose) {
-      console.log(chalk.bold.green('No corresponding migration folder. Creating...'))
+      const str = 'No corresponding migration folder. Creating...'
+      const message = chalk.bold.green(str)
+      console.log(message)
     }
     return helpers.mkdir(migrationsPath, { recursive: true })
   } else {
@@ -28,33 +30,41 @@ const handleAccessError = (migrationsPath, options) => error => {
   }
 }
 
-const generateFiles = (migrationsPath, name, options) => () => Promise.all(
-  helpers.generateUpAndDownFileNames(Date.now(), name)
+const generateFiles = (migrationsPath, name, options) => () => {
+  const writtenFiles = helpers
+    .generateUpAndDownFileNames(Date.now(), name)
     .map(turnIntoAbsolutePath(migrationsPath))
     .map(writeMigrationFile(options))
-)
+  return Promise.all(writtenFiles)
+}
+
+const displayError = ({ verbose }) => error => {
+  if (verbose) {
+    console.error(error)
+  }
+}
 
 const createMigrationsFolderAndFiles = (migrationsPath, name, options) => {
-  return helpers.access(migrationsPath, fs.constants.F_OK | fs.constants.W_OK)
+  return helpers
+    .access(migrationsPath, fs.constants.F_OK | fs.constants.W_OK)
     .catch(handleAccessError(migrationsPath, options))
     .then(generateFiles(migrationsPath, name, options))
-    .catch(error => {
-      if (options.verbose) {
-        console.error(error)
-      }
-    })
+    .catch(displayError(options))
 }
 
 const migration = (migrationsFolder, name, options = { verbose: true }) => {
   if (name.length === 0) {
     if (options.verbose) {
-      console.error(chalk.bold.red('You did not specified migration name. Aborting.'))
+      const str = 'You did not specified migration name. Aborting.'
+      const message = chalk.bold.red(str)
+      console.error(message)
       return false
     }
     return false
   } else {
     const migrationsPath = path.resolve(migrationsFolder || MIGRATIONS_FOLDER)
-    return createMigrationsFolderAndFiles(migrationsPath, name.replace(' ', '-'), options)
+    const dashedName = name.replace(' ', '-')
+    return createMigrationsFolderAndFiles(migrationsPath, dashedName, options)
   }
 }
 
