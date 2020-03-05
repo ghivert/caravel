@@ -20,7 +20,7 @@
     "caravel": "bin/index.js"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "jest",
     "migrate": "node ./bin/index.js migrate"
   },
   "dependencies": {
@@ -31,8 +31,7 @@
     "stonebraker": "^0.1.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
     "eslint": "^5.16.0",
-    "mocha": "^6.0.2"
+    "jest": "^25.1.0"
   }
 }
