@@ -1,6 +1,6 @@
 {
-  "name": "@wolfox/caravel",
-  "version": "0.1.2",
+  "name": "@ghivert/caravel",
+  "version": "0.0.0",
   "main": "src/main.js",
   "description": "Smart, simple and efficient way to manage PostgreSQL migration files.",
   "repository": "git@github.com:wolfoxco/caravel.git",

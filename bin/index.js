@@ -21,7 +21,7 @@ const helpText = [
 ].join('\n')
 
 program
-  .version('0.1.2')
+  .version('0.1.0')
   .description(helpText)
   .option('-c, --config <path>', 'Specify connection database config file')
   .option('-f, --folder <path>', 'Specify migrations folder path')
