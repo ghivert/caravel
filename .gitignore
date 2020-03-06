@@ -1,7 +1,7 @@
 # JS Stuff
 node_modules/
 tmp/
-migrations/
+/db
 
 # OS Stuff
 .DS_Store

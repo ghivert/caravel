@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 
-const { create } = require('../src/client')
+const { initialize, close } = require('../src/database')
 
 const TMP_PATH = path.resolve('./tmp')
 const CONFIG_NAME = path.resolve(TMP_PATH, 'config.json')
@@ -48,34 +48,38 @@ describe('The database client, during creation', () => {
   afterAll(deleteTmpDirectory)
 
   it('should be able to read a config file', async () => {
-    const client = create('./tmp/config.json')
+    const { client } = await initialize('./tmp/config.json')
     testClient(client)
+    await close({ client })
   })
 
   it('should be able to read a global DATABASE_URL variable', async () => {
     process.env.DATABASE_URL = generateDatabaseURL()
-    const client = create()
+    const { client } = await initialize()
     testClient(client)
     delete process.env.DATABASE_URL
+    await close({ client })
   })
 
   it('should be able to read a local DATABASE_URL variable in a .env file', async () => {
     fs.writeFileSync(ENV_FILE, `DATABASE_URL = ${generateDatabaseURL()}`)
     // Here because require('dotenv').config() is loaded during require.
     require('dotenv').config()
-    const client = create()
+    const { client } = await initialize()
     testClient(client)
     delete process.env.DATABASE_URL
     fs.unlinkSync(ENV_FILE)
+    await close({ client })
   })
 
   it('should be able to read config from global environment', async () => {
-    const client = create()
+    const { client } = await initialize()
     const { PGUSER, PGDATABASE, PGPORT, PGHOST, PGPASSWORD, USER } = process.env
     expect(client.user).toEqual(PGUSER || USER)
     expect(client.database).toEqual(PGDATABASE || USER)
     expect(client.port).toEqual(PGPORT || 5432)
     expect(client.host).toEqual(PGHOST || LOCALHOST)
     expect(client.password).toEqual(PGPASSWORD || null)
+    await close({ client })
   })
 })
