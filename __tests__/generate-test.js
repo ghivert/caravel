@@ -1,8 +1,8 @@
 const path = require('path')
 const fs = require('fs')
+const proms = fs.promises
 
 const generate = require('../src/generate')
-const helpers = require('../src/helpers')
 
 const MIGRATIONS_PATH = path.resolve('db/migrations')
 const CUSTOM_PATH = path.resolve('custom-migrations')
@@ -39,18 +39,18 @@ const checkCorrectFileGenerated = (name, filename) => {
 }
 
 const checkFolderExists = path => {
-  return helpers.access(path, fs.constants.F_OK | fs.constants.W_OK)
+  return proms.access(path, fs.constants.F_OK | fs.constants.W_OK)
 }
 
 const generateFiles = migrationsPath => file => {
   const filePath = path.resolve(migrationsPath, file)
-  helpers.writeFile(filePath, '')
+  proms.writeFile(filePath, '')
 }
 
 const generateMigrationsFolderAndFiles = async (migrationsPath, filenames) => {
-  await helpers.mkdir(migrationsPath, { recursive: true })
+  await proms.mkdir(migrationsPath, { recursive: true })
   if (filenames) {
-    const filesName = helpers.generateUpAndDownFileNames(Date.now(), filenames)
+    const filesName = generate.generateUpAndDownFileNames(Date.now(), filenames)
     return Promise.all(filesName.map(generateFiles(migrationsPath)))
   }
 }
@@ -62,7 +62,7 @@ const checkHowMuchFileGenerated = (dirContent, name) => {
 }
 
 const unlinkFile = filename => {
-  helpers.unlink(path.resolve(CUSTOM_PATH, filename))
+  proms.unlink(path.resolve(CUSTOM_PATH, filename))
 }
 
 describe('The migrations generation', () => {
@@ -73,7 +73,7 @@ describe('The migrations generation', () => {
     it('should generate two files with a timestamp in default folder and generating it', async () => {
       await migration(null, NAME)
       await checkFolderExists(MIGRATIONS_PATH)
-      const dirContent = await helpers.readdir(MIGRATIONS_PATH)
+      const dirContent = await proms.readdir(MIGRATIONS_PATH)
       expect(dirContent.length).toEqual(2)
       checkHowMuchFileGenerated(dirContent, NAME)
     })
@@ -82,7 +82,7 @@ describe('The migrations generation', () => {
       await generateMigrationsFolderAndFiles(MIGRATIONS_PATH)
       await migration(null, NAME)
       await checkFolderExists(MIGRATIONS_PATH)
-      const dirContent = await helpers.readdir(MIGRATIONS_PATH)
+      const dirContent = await proms.readdir(MIGRATIONS_PATH)
       expect(dirContent.length).toEqual(2)
       checkHowMuchFileGenerated(dirContent, NAME)
     })
@@ -91,7 +91,7 @@ describe('The migrations generation', () => {
       const OTHER_FILENAMES = ['create-posts-table']
       await generateMigrationsFolderAndFiles(MIGRATIONS_PATH, OTHER_FILENAMES)
       await migration(null, NAME)
-      const dirContent = await helpers.readdir(MIGRATIONS_PATH)
+      const dirContent = await proms.readdir(MIGRATIONS_PATH)
       expect(dirContent.length).toEqual(4)
       checkHowMuchFileGenerated(dirContent, NAME)
     })
@@ -99,11 +99,11 @@ describe('The migrations generation', () => {
     it('should generate two files with a timestamp in a custom folder', async () => {
       await migration(CUSTOM_PATH, NAME)
       await checkFolderExists(CUSTOM_PATH)
-      const dirContent = await helpers.readdir(CUSTOM_PATH)
+      const dirContent = await proms.readdir(CUSTOM_PATH)
       expect(dirContent.length).toEqual(2)
       checkHowMuchFileGenerated(dirContent, NAME)
       await Promise.all(dirContent.map(unlinkFile))
-      await helpers.rmdir(CUSTOM_PATH)
+      await proms.rmdir(CUSTOM_PATH)
     })
 
     it('should not generate files if no filename given', async () => {

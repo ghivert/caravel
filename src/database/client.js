@@ -1,6 +1,5 @@
 require('dotenv').config()
 
-const helpers = require('./helpers')
 const path = require('path')
 const { Client } = require('pg')
 
@@ -43,7 +42,9 @@ const connect = async client => {
 }
 
 function clientGenerateURL() {
-  return helpers.generateDatabaseURL(this)
+  const { user, password, host, port, database } = this
+  const passwordPart = password ? `:${password}` : ''
+  return `postgres://${user}${passwordPart}@${host}:${port}/${database}`
 }
 
 Client.prototype.databaseURL = Client.prototype.databaseURL || clientGenerateURL

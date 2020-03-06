@@ -3,14 +3,15 @@ require('dotenv').config()
 const path = require('path')
 const fs = require('fs')
 const chalk = require('chalk')
-const helpers = require('./helpers')
+const proms = fs.promises
+
 const { MIGRATIONS_FOLDER } = require('./constants')
 
 const writeMigrationFile = options => filename => {
   if (options.verbose) {
     console.log(chalk.bold.green(`Creating ${filename}...`))
   }
-  return helpers.writeFile(filename, '-- Your migration code here.')
+  return proms.writeFile(filename, '-- Your migration code here.')
 }
 
 const turnIntoAbsolutePath = migrationsPath => filename => {
@@ -24,15 +25,21 @@ const handleAccessError = (migrationsPath, options) => error => {
       const message = chalk.bold.green(str)
       console.log(message)
     }
-    return helpers.mkdir(migrationsPath, { recursive: true })
+    return proms.mkdir(migrationsPath, { recursive: true })
   } else {
     throw error
   }
 }
 
+const generateUpAndDownFileNames = (timestamp, name) => {
+  const baseName = `${timestamp}-${name}`
+  const upAndDownNames = [`${baseName}.up`, `${baseName}.down`]
+  const fullNames = upAndDownNames.map(elem => `${elem}.sql`)
+  return fullNames
+}
+
 const generateFiles = (migrationsPath, name, options) => () => {
-  const writtenFiles = helpers
-    .generateUpAndDownFileNames(Date.now(), name)
+  const writtenFiles = generateUpAndDownFileNames(Date.now(), name)
     .map(turnIntoAbsolutePath(migrationsPath))
     .map(writeMigrationFile(options))
   return Promise.all(writtenFiles)
@@ -45,7 +52,7 @@ const displayError = ({ verbose }) => error => {
 }
 
 const createMigrationsFolderAndFiles = (migrationsPath, name, options) => {
-  return helpers
+  return proms
     .access(migrationsPath, fs.constants.F_OK | fs.constants.W_OK)
     .catch(handleAccessError(migrationsPath, options))
     .then(generateFiles(migrationsPath, name, options))
@@ -69,5 +76,6 @@ const migration = (migrationsFolder, name, options = { verbose: true }) => {
 }
 
 module.exports = {
+  generateUpAndDownFileNames,
   migration,
 }
