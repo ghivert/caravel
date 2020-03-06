@@ -24,10 +24,10 @@
     "migrate": "node ./bin/index.js migrate"
   },
   "dependencies": {
-    "chalk": "^2.4.2",
-    "commander": "^2.19.0",
-    "dotenv": "^6.2.0",
-    "pg": "^7.8.2",
+    "chalk": "^3.0.0",
+    "commander": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "pg": "^7.18.2",
     "stonebraker": "^0.1.0"
   },
   "devDependencies": {
