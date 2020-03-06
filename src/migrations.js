@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const path = require('path')
 const chalk = require('chalk')
 const helpers = require('./helpers')

@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const { run, revert } = require('./migrations')
 const generate = require('./generate')
 
