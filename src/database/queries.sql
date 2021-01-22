@@ -1,5 +1,5 @@
 -- name: create_migrations_table
-create table caravel_migrations (
+create table __caravel_migrations (
   version text primary key,
   hash text not null
 );
@@ -8,22 +8,22 @@ create table caravel_migrations (
 select exists (
   select 1
   from information_schema.tables
-  where table_name = 'caravel_migrations'
+  where table_name = '__caravel_migrations'
 );
 
 -- name: get_all_migrations
 select *
-from caravel_migrations
+from __caravel_migrations
 order by version;
 
 -- name: insert_migration
 -- keys: version, hash
-insert into caravel_migrations (version, hash)
+insert into __caravel_migrations (version, hash)
 values ($version, $hash);
 
 -- name: delete_migration
 -- keys: version
-delete from caravel_migrations
+delete from __caravel_migrations
 where version = $version;
 
 -- name: get_tables_name
