@@ -1,10 +1,10 @@
 {
   "name": "@ghivert/caravel",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "main": "src/main.js",
   "description": "Smart, simple and efficient way to manage PostgreSQL migration files.",
-  "repository": "git@github.com:wolfoxco/caravel.git",
-  "homepage": "https://github.com/wofoxco/caravel",
+  "repository": "git@github.com:ghivert/caravel.git",
+  "homepage": "https://github.com/ghivert/caravel",
   "license": "MIT",
   "contributors": [
     "Mehdi Louraoui <med.louraoui@gmail.com>",
@@ -24,11 +24,11 @@
     "migrate": "node ./bin/index.js migrate"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.0",
     "commander": "^4.1.1",
     "dotenv": "^8.2.0",
-    "pg": "^7.18.2",
-    "stonebraker": "^0.1.0"
+    "pg": "^8.5.1",
+    "stonebraker": "^0.1.1"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
