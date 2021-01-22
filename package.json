@@ -1,6 +1,6 @@
 {
   "name": "@ghivert/caravel",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "src/main.js",
   "description": "Smart, simple and efficient way to manage PostgreSQL migration files.",
   "repository": "git@github.com:ghivert/caravel.git",
