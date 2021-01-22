@@ -116,6 +116,7 @@ const connectAndGetMigrations = async (configFilePath, migrationsFolder) => {
     const { client, queries, connected } = db
     if (!connected) {
       printUnconnected(client)
+      process.exit(1)
     } else {
       await queries.createMigrationsTableIfNeeded()
       const fromDB = await queries.getAllMigrationsFromTable()
@@ -123,7 +124,7 @@ const connectAndGetMigrations = async (configFilePath, migrationsFolder) => {
       return { db, fromDB, fromFS }
     }
   } catch (error) {
-    return db
+    return { db, fromFS: [[], []], fromDB: [] }
   }
 }
 
