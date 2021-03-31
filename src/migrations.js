@@ -8,7 +8,7 @@ const { MIGRATIONS_TABLE_NAME, MIGRATIONS_FOLDER } = require('./constants')
 const hashMigration = content => {
   const hasher = crypto.createHash('sha512')
   hasher.update(content)
-  return hasher.digest('utf8')
+  return hasher.digest('utf8').replace(/\0/g)
 }
 
 const readMigration = async filename => {
